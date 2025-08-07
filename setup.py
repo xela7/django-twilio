@@ -10,10 +10,16 @@ INSTALL_PYTHON_REQUIRES = []
 # We are intending to keep up to date with the supported Django versions.
 # For the official support, please visit:
 # https://docs.djangoproject.com/en/dev/faq/install/#what-python-version-can-i-use-with-django
-if (py_minor_version := sys.version_info.minor) in [8, 9, 10, 11]:
-    django_python_version_install = (
-        f"Django>=4.0,<{'6' if py_minor_version >= 10 else '5'}"
-    )
+if (py_minor_version := sys.version_info.minor) in [8, 9, 10, 11, 12, 13]:
+    if py_minor_version in [8, 9]:
+        # Python 3.8-3.9: Django 4.x only
+        django_python_version_install = "Django>=4.0,<5.0"
+    elif py_minor_version in [10, 11]:
+        # Python 3.10-3.11: Django 4.x and 5.x
+        django_python_version_install = "Django>=4.0,<6.0"
+    else:  # py_minor_version in [12, 13]
+        # Python 3.12-3.13: Django 5.x only (6.x not yet stable)
+        django_python_version_install = "Django>=5.0,<6.0"
     INSTALL_PYTHON_REQUIRES.append(django_python_version_install)
 
 setup(
@@ -56,6 +62,9 @@ setup(
         'Framework :: Django',
         'Framework :: Django :: 4.0',
         'Framework :: Django :: 4.1',
+        'Framework :: Django :: 5.0',
+        'Framework :: Django :: 5.1',
+        'Framework :: Django :: 5.2',
         'Intended Audience :: Developers',
         'License :: Public Domain',
         'Operating System :: OS Independent',
@@ -66,6 +75,8 @@ setup(
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
+        'Programming Language :: Python :: 3.12',
+        'Programming Language :: Python :: 3.13',
         'Programming Language :: Python :: Implementation :: CPython',
         'Programming Language :: Python :: Implementation :: PyPy',
         'Topic :: Internet :: WWW/HTTP',
